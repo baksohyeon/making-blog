@@ -7,3 +7,7 @@ export class CreateBoardDTO {
 
   readonly author: string;
 }
+
+export class CreateBoardResponse {
+  id: string;
+}

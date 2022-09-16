@@ -15,8 +15,12 @@ export class BlogService {
     return this.boardRepository.find();
   }
 
-  async createBoard(creatBoardDto: CreateBoardDTO) {
-    const newBoard = this.boardRepository.create(creatBoardDto);
-    return this.boardRepository.save(newBoard);
+  createBoard(creatBoardDto: CreateBoardDTO): Promise<Board> {
+    try {
+      const newBoard = this.boardRepository.create(creatBoardDto);
+      return this.boardRepository.save(newBoard);
+    } catch (e) {
+      throw e;
+    }
   }
 }

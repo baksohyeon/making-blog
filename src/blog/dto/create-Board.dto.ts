@@ -1,6 +1,4 @@
-// /blog/dto/create-dto.dto.ts
-
-export class CreatePostDTO {
+export class CreateBoardDTO {
   readonly title: string;
 
   readonly description: string;
@@ -8,6 +6,4 @@ export class CreatePostDTO {
   readonly body: string;
 
   readonly author: string;
-
-  readonly date_posted: string;
 }

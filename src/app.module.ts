@@ -9,9 +9,9 @@ import { BlogModule } from './blog/blog.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: 33060,
+      port: 3306,
       username: 'root',
-      password: '',
+      password: 'soso5020',
       database: 'blog',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,

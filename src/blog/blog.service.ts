@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateBoardDTO } from './dto/create-Board.dto';
 import { Board } from './entity/board.entity';
 
@@ -20,7 +20,15 @@ export class BlogService {
     }
   }
 
+  // Read
   async getAllBoards(): Promise<Board[]> {
     return this.boardRepository.find();
+  }
+
+  async getBoardsByAuthor(author: string): Promise<Board[] | undefined> {
+    return this.boardRepository
+      .createQueryBuilder('board')
+      .where('board.author = :author', { author })
+      .getMany();
   }
 }

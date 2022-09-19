@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   InternalServerErrorException,
+  Param,
   Post,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
@@ -44,5 +45,10 @@ export class BlogController {
   @Get('/all')
   async getAllBoards(): Promise<Board[]> {
     return this.boardService.getAllBoards();
+  }
+
+  @Get('/:author')
+  async getBoardByAuthor(@Param('author') author: string) {
+    return await this.boardService.getBoardsByAuthor(author);
   }
 }

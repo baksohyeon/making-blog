@@ -2,10 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
-  HttpStatus,
+  Get,
   InternalServerErrorException,
   Post,
-  Res,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBoardDTO, CreateBoardResponse } from './dto/create-Board.dto';
@@ -39,5 +38,11 @@ export class BlogController {
           );
       }
     }
+  }
+
+  // Read
+  @Get('/all')
+  async getAllBoards(): Promise<Board[]> {
+    return this.boardService.getAllBoards();
   }
 }

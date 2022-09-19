@@ -11,10 +11,6 @@ export class BlogService {
     private boardRepository: Repository<Board>,
   ) {}
 
-  async getAllBoard(): Promise<Board[]> {
-    return this.boardRepository.find();
-  }
-
   createBoard(creatBoardDto: CreateBoardDTO): Promise<Board> {
     try {
       const newBoard = this.boardRepository.create(creatBoardDto);
@@ -22,5 +18,9 @@ export class BlogService {
     } catch (e) {
       throw e;
     }
+  }
+
+  async getAllBoards(): Promise<Board[]> {
+    return this.boardRepository.find();
   }
 }

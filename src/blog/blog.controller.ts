@@ -4,11 +4,13 @@ import {
   Controller,
   HttpStatus,
   InternalServerErrorException,
+  Param,
   Post,
   Res,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entity/board.entity';
 
 @Controller('blog')
@@ -39,5 +41,13 @@ export class BlogController {
           );
       }
     }
+  }
+
+  @Post('/:id')
+  async updateBoard(
+    @Param('id') id: string,
+    @Body() updateBoardDto: UpdateBoardDto,
+  ) {
+    return this.boardService.updateBoard(id, updateBoardDto);
   }
 }

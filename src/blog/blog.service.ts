@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBoardDTO } from './dto/create-Board.dto';
+import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './entity/board.entity';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class BlogService {
     return this.boardRepository.find();
   }
 
-  createBoard(creatBoardDto: CreateBoardDTO): Promise<Board> {
+  createBoard(creatBoardDto: CreateBoardDto): Promise<Board> {
     try {
       const newBoard = this.boardRepository.create(creatBoardDto);
       return this.boardRepository.save(newBoard);

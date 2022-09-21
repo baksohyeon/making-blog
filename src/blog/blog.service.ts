@@ -25,7 +25,7 @@ export class BlogService {
   }
 
   deleteBoard(id: string) {
-    const board = this.boardRepository.delete({ id });
+    this.boardRepository.delete({ id });
     // return this.boardRepository.delete();
   }
 }

@@ -41,7 +41,7 @@ export class BlogController {
     }
   }
 
-  @Delete('/delete/:id')
+  @Delete('/:id')
   async deleteBoard(@Param('id') id: string) {
     return this.boardService.deleteBoard(id);
   }

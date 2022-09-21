@@ -2,10 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
-  HttpStatus,
+  Delete,
   InternalServerErrorException,
+  Param,
   Post,
-  Res,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-Board.dto';
@@ -39,5 +39,10 @@ export class BlogController {
           );
       }
     }
+  }
+
+  @Delete('/delete/:id')
+  async deleteBoard(@Param('id') id: string) {
+    return this.boardService.deleteBoard(id);
   }
 }

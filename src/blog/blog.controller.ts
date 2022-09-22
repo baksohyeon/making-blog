@@ -48,6 +48,6 @@ export class BlogController {
     @Param('id') id: string,
     @Body() updateBoardDto: UpdateBoardDto,
   ) {
-    return this.boardService.updateBoard(id, updateBoardDto);
+    return await this.boardService.updateBoard(id, updateBoardDto);
   }
 }

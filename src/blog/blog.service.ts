@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBoardDto } from './dto/create-Board.dto';
+import { CreateBoardDTO } from './dto/create-Board.dto';
 import { Board } from './entity/board.entity';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class BlogService {
     return this.boardRepository.find();
   }
 
-  createBoard(creatBoardDto: CreateBoardDto): Promise<Board> {
+  createBoard(creatBoardDto: CreateBoardDTO): Promise<Board> {
     try {
       const newBoard = this.boardRepository.create(creatBoardDto);
       return this.boardRepository.save(newBoard);

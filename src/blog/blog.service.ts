@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-Board.dto';
@@ -24,8 +24,19 @@ export class BlogService {
     }
   }
 
-  deleteBoard(id: string) {
-    this.boardRepository.delete({ id });
-    // return this.boardRepository.delete();
+  async deleteBoard(id: string): Promise<void> {
+    try {
+      const droppedBoard = await this.boardRepository.findOne({
+        where: {
+          id,
+        },
+      });
+      if (!droppedBoard) {
+        this.boardRepository.delete(id);
+      }
+      throw new NotFoundException('Corresponding ID is not found');
+    } catch (e) {
+      throw e;
+    }
   }
 }

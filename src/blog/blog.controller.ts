@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { CreateBoardDto, CreateBoardResponse } from './dto/create-Board.dto';
+import { CreateBoardDTO, CreateBoardResponse } from './dto/create-Board.dto';
 import { Board } from './entity/board.entity';
 
 @Controller('blog')
@@ -18,7 +18,7 @@ export class BlogController {
   // submit a post
   @Post('/post')
   async createBoard(
-    @Body() createBoardDto: CreateBoardDto,
+    @Body() createBoardDto: CreateBoardDTO,
   ): Promise<CreateBoardResponse> {
     try {
       const newBoard = await this.boardService.createBoard(createBoardDto);

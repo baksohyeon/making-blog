@@ -31,7 +31,7 @@ export class BlogService {
           id,
         },
       });
-      if (!droppedBoard) {
+      if (droppedBoard) {
         this.boardRepository.delete(id);
       }
       throw new NotFoundException('Corresponding ID is not found');

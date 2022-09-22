@@ -43,7 +43,12 @@ export class BlogController {
 
   @Get('/all')
   async getAllBoards(): Promise<Board[]> {
-    return this.boardService.getAllBoards();
+    try {
+      const allBoards = await this.boardService.getAllBoards();
+      return allBoards;
+    } catch (e) {
+      throw e;
+    }
   }
 
   @Get('/author/:author')

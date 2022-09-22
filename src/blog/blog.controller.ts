@@ -42,7 +42,7 @@ export class BlogController {
   }
 
   @Delete('/:id')
-  async deleteBoard(@Param('id') id: string) {
-    await this.boardService.deleteBoard(id);
+  async deleteBoard(@Param('id') id: string): Promise<void> {
+    this.boardService.deleteBoard(id);
   }
 }

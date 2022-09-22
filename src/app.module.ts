@@ -22,6 +22,4 @@ import { BlogModule } from './blog/blog.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}

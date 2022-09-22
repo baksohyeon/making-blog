@@ -41,14 +41,13 @@ export class BlogController {
     }
   }
 
-  // Read
   @Get('/all')
   async getAllBoards(): Promise<Board[]> {
     return this.boardService.getAllBoards();
   }
 
-  @Get('/:author')
+  @Get('/author/:author')
   async getBoardByAuthor(@Param('author') author: string) {
-    return await this.boardService.getBoardsByAuthor(author);
+    return this.boardService.getBoardsByAuthor(author);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreateBoardDTO } from './dto/create-Board.dto';
@@ -26,9 +26,21 @@ export class BlogService {
   }
 
   async getBoardsByAuthor(author: string): Promise<Board[] | undefined> {
-    return this.boardRepository
-      .createQueryBuilder('board')
-      .where('board.author = :author', { author })
-      .getMany();
+    try {
+      const boards = await this.boardRepository.findOne({
+        where: {
+          author,
+        },
+      });
+      if (!boards) {
+        throw new NotFoundException('There is no such a person.');
+      }
+      return this.boardRepository
+        .createQueryBuilder('board')
+        .where('board.author = :author', { author })
+        .getMany();
+    } catch (e) {
+      throw e;
+    }
   }
 }

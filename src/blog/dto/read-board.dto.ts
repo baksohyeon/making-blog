@@ -8,5 +8,6 @@ export class GetBoardResponse {
   body: string;
 
   author: string;
+
   dated_at: Date;
 }

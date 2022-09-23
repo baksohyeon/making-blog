@@ -10,6 +10,8 @@ import {
 import { BlogService } from './blog.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-Board.dto';
 import { Board } from './entity/board.entity';
+import { GetBoardResponseDto } from './dto/read-board.dto';
+import { CustomRepositoryCannotInheritRepositoryError } from 'typeorm';
 
 @Controller('blog')
 export class BlogController {
@@ -42,7 +44,12 @@ export class BlogController {
   }
 
   @Delete('/:id')
-  async deleteBoard(@Param('id') id: string): Promise<void> {
-    this.boardService.deleteBoard(id);
+  async deleteBoard(@Param('id') id: string): Promise<GetBoardResponseDto> {
+    try {
+      const board = await this.boardService.deleteBoard(id);
+      return board;
+    } catch (e) {
+      throw e;
+    }
   }
 }

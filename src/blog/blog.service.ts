@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-Board.dto';
@@ -24,7 +28,7 @@ export class BlogService {
     }
   }
 
-  async deleteBoard(id: string): Promise<void> {
+  async deleteBoard(id: string): Promise<Board> {
     try {
       const droppedBoard = await this.boardRepository.findOne({
         where: {
@@ -35,9 +39,13 @@ export class BlogService {
         throw new NotFoundException('Corresponding ID is not found');
       } else {
         this.boardRepository.delete(id);
+        return droppedBoard;
       }
     } catch (e) {
-      throw e;
+      if (e.constructor.name === 'NotFoundException') {
+        throw e;
+      }
+      throw new InternalServerErrorException(e);
     }
   }
 }

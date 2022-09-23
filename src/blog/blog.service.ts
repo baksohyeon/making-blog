@@ -31,10 +31,11 @@ export class BlogService {
           id,
         },
       });
-      if (droppedBoard) {
+      if (!droppedBoard) {
+        throw new NotFoundException('Corresponding ID is not found');
+      } else {
         this.boardRepository.delete(id);
       }
-      throw new NotFoundException('Corresponding ID is not found');
     } catch (e) {
       throw e;
     }

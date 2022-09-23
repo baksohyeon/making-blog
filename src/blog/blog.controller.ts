@@ -8,8 +8,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { CreateBoardDto, CreateBoardResponse } from './dto/create-Board.dto';
+import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
 
 @Controller('blog')
 export class BlogController {
@@ -39,6 +40,14 @@ export class BlogController {
           );
       }
     }
+  }
+
+  @Post('/:id')
+  async updateBoard(
+    @Param('id') id: string,
+    @Body() updateBoardDto: UpdateBoardDto,
+  ) {
+    return await this.boardService.updateBoard(id, updateBoardDto);
   }
 
   @Delete('/:id')

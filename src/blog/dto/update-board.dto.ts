@@ -1,4 +1,4 @@
-export class CreateBoardDto {
+export class UpdateBoardDto {
   readonly title: string;
 
   readonly description: string;
@@ -6,8 +6,4 @@ export class CreateBoardDto {
   readonly body: string;
 
   readonly author: string;
-}
-
-export class CreateBoardResponse {
-  id: string;
 }

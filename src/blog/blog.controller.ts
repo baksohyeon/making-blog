@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBoardDTO, CreateBoardResponse } from './dto/create-Board.dto';
+import { GetBoardResponseDto } from './dto/read-board.dto';
 import { Board } from './entity/board.entity';
 
 @Controller('blog')
@@ -42,9 +43,11 @@ export class BlogController {
   }
 
   @Get('/all')
-  async getAllBoards(): Promise<Board[]> {
+  async getAllBoards(): Promise<GetBoardResponseDto[]> {
     try {
-      const allBoards = await this.boardService.getAllBoards();
+      const allBoards = (await this.boardService.getAllBoards()).map(
+        (board) => board as GetBoardResponseDto,
+      );
       return allBoards;
     } catch (e) {
       throw e;
@@ -52,7 +55,9 @@ export class BlogController {
   }
 
   @Get('/author/:author')
-  async getBoardByAuthor(@Param('author') author: string) {
+  async getBoardByAuthor(
+    @Param('author') author: string,
+  ): Promise<GetBoardResponseDto[]> {
     return this.boardService.getBoardsByAuthor(author);
   }
 }

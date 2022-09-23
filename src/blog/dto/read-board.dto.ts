@@ -1,4 +1,4 @@
-export class GetBoardResponse {
+export class GetBoardResponseDto {
   id: string;
 
   title: string;

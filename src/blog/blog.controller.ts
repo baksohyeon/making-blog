@@ -9,9 +9,7 @@ import {
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-Board.dto';
-import { Board } from './entity/board.entity';
-import { GetBoardResponseDto } from './dto/read-board.dto';
-import { CustomRepositoryCannotInheritRepositoryError } from 'typeorm';
+import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 
 @Controller('blog')
 export class BlogController {
@@ -44,7 +42,7 @@ export class BlogController {
   }
 
   @Delete('/:id')
-  async deleteBoard(@Param('id') id: string): Promise<GetBoardResponseDto> {
+  async deleteBoard(@Param('id') id: string): Promise<DeleteBoardResponseDto> {
     try {
       const board = await this.boardService.deleteBoard(id);
       return board;

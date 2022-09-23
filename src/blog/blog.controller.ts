@@ -8,7 +8,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { CreateBoardDTO, CreateBoardResponse } from './dto/create-Board.dto';
+import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
 import { Board } from './entity/board.entity';
 
@@ -19,7 +20,7 @@ export class BlogController {
   // submit a post
   @Post('/post')
   async createBoard(
-    @Body() createBoardDto: CreateBoardDTO,
+    @Body() createBoardDto: CreateBoardDto,
   ): Promise<CreateBoardResponse> {
     try {
       const newBoard = await this.boardService.createBoard(createBoardDto);
@@ -59,5 +60,13 @@ export class BlogController {
     @Param('author') author: string,
   ): Promise<GetBoardResponseDto[]> {
     return this.boardService.getBoardsByAuthor(author);
+  }
+
+  @Post('/:id')
+  async updateBoard(
+    @Param('id') id: string,
+    @Body() updateBoardDto: UpdateBoardDto,
+  ) {
+    return await this.boardService.updateBoard(id, updateBoardDto);
   }
 }

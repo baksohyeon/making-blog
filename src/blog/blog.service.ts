@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -24,7 +28,15 @@ export class BlogService {
 
   // Read
   async getAllBoards(): Promise<Board[]> {
-    return this.boardRepository.find();
+    try {
+      const boards = await this.boardRepository.find();
+      return boards;
+    } catch (e) {
+      if (e.constructor.name) {
+        throw e;
+      }
+      throw new InternalServerErrorException(e);
+    }
   }
 
   async getBoardsByAuthor(author: string): Promise<GetBoardResponseDto[]> {
@@ -34,10 +46,12 @@ export class BlogService {
           author,
         },
       });
-
       return boards.map((board) => board as GetBoardResponseDto);
     } catch (e) {
-      throw e;
+      if (e.constructor.name === 'NotFoundException') {
+        throw e;
+      }
+      throw new InternalServerErrorException(e);
     }
   }
 

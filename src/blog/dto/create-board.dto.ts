@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateBoardDto {
   @IsNotEmpty()
@@ -7,6 +7,7 @@ export class CreateBoardDto {
 
   @IsNotEmpty()
   @IsString()
+  @MaxLength(300)
   readonly description: string;
 
   @IsNotEmpty()

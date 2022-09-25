@@ -32,7 +32,7 @@ export class BlogService {
       const boards = await this.boardRepository.find();
       return boards;
     } catch (e) {
-      if (e.constructor.name) {
+      if (e.constructor.name === 'NotFoundException') {
         throw e;
       }
       throw new InternalServerErrorException(e);

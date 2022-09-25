@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   InternalServerErrorException,
   Param,
   Post,
@@ -11,6 +12,7 @@ import { BlogService } from './blog.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { GetBoardResponseDto } from './dto/read-board.dto';
 
 @Controller('blog')
 export class BlogController {
@@ -40,6 +42,25 @@ export class BlogController {
           );
       }
     }
+  }
+
+  @Get('/all')
+  async getAllBoards(): Promise<GetBoardResponseDto[]> {
+    try {
+      const allBoards = (await this.boardService.getAllBoards()).map(
+        (board) => board as GetBoardResponseDto,
+      );
+      return allBoards;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @Get('/author/:author')
+  async getBoardByAuthor(
+    @Param('author') author: string,
+  ): Promise<GetBoardResponseDto[]> {
+    return this.boardService.getBoardsByAuthor(author);
   }
 
   @Post('/:id')

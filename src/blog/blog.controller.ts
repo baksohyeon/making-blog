@@ -2,16 +2,15 @@ import {
   BadRequestException,
   Body,
   Controller,
-  HttpStatus,
+  Delete,
   InternalServerErrorException,
   Param,
   Post,
-  Res,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
+import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { Board } from './entity/board.entity';
 
 @Controller('blog')
 export class BlogController {
@@ -49,5 +48,15 @@ export class BlogController {
     @Body() updateBoardDto: UpdateBoardDto,
   ) {
     return await this.boardService.updateBoard(id, updateBoardDto);
+  }
+
+  @Delete('/:id')
+  async deleteBoard(@Param('id') id: string): Promise<DeleteBoardResponseDto> {
+    try {
+      const board = await this.boardService.deleteBoard(id);
+      return board;
+    } catch (e) {
+      throw e;
+    }
   }
 }

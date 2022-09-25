@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
 import { Board } from './entity/board.entity';
 
@@ -83,6 +84,27 @@ export class BlogService {
       );
     } catch (e) {
       throw e;
+    }
+  }
+
+  async deleteBoard(id: string): Promise<DeleteBoardResponseDto> {
+    try {
+      const droppedBoard = await this.boardRepository.findOne({
+        where: {
+          id,
+        },
+      });
+      if (!droppedBoard) {
+        throw new NotFoundException('Corresponding ID is not found');
+      } else {
+        this.boardRepository.delete(id);
+        return droppedBoard as DeleteBoardResponseDto;
+      }
+    } catch (e) {
+      if (e.constructor.name === 'NotFoundException') {
+        throw e;
+      }
+      throw new InternalServerErrorException(e);
     }
   }
 }

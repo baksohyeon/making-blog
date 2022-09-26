@@ -26,7 +26,6 @@ export class BlogService {
       throw e;
     }
   }
-
   // Read
   async getAllBoards(): Promise<Board[]> {
     try {

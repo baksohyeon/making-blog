@@ -1,46 +1,40 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BlogController } from './blog.controller';
-import { BlogService } from './blog.service';
-import { Board } from './entity/board.entity';
+import { BlogController } from '../blog.controller';
+import { BlogService } from '../blog.service';
+import { Board } from '../entity/board.entity';
 
-/*
- *  const mockBlogRepository = () => ({
- *    find: jest.fn(),
- *    save: jest.fn(),
- *  });
- */
-const boardArray = [new Board(), new Board()];
+const mockBlogRepository = () => ({
+  create: jest.fn(),
+  find: jest.fn(),
+  save: jest.fn(),
+});
 
 describe('BlogService', () => {
   let blogService: BlogService;
   // let blogController: BlogController;
-  // let blogRepository: Repository<Board>;
+  let blogRepository: Repository<Board>;
+
+  const BOARD_REPOSITORY_TOKEN = getRepositoryToken(Board);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BlogService,
         {
-          provide: getRepositoryToken(Board),
-          useValue: {
-            find: jest.fn().mockResolvedValue(boardArray),
-          },
+          provide: BOARD_REPOSITORY_TOKEN,
+          useValue: mockBlogRepository(),
         },
       ],
       controllers: [BlogController],
     }).compile();
 
     blogService = module.get<BlogService>(BlogService);
-    // blogController = module.get<BlogController>(BlogController);
+    blogRepository = module.get<Repository<Board>>(BOARD_REPOSITORY_TOKEN);
   });
 
   it('should be defined', () => {
     expect(blogService).toBeDefined();
-  });
-
-  it('should be 4', () => {
-    expect(2 + 2).toEqual(4);
   });
 });

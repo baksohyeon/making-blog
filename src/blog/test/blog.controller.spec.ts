@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { BlogController } from '../blog.controller';
 import { BlogService } from '../blog.service';
 import { CreateBoardDto } from '../dto/create-board.dto';
+import { Board } from '../entity/board.entity';
 
 describe('BlogController', () => {
   let blogController: BlogController;
@@ -18,6 +20,36 @@ describe('BlogController', () => {
           ...createBoardDto,
         }),
       ),
+
+    getAllBoards: jest.fn().mockResolvedValue([
+      {
+        title: '1',
+        description: '1',
+        body: '1',
+        author: '1',
+      },
+      {
+        title: '2',
+        description: '2',
+        body: '2',
+        author: '2',
+      },
+      {
+        title: '3',
+        description: '3',
+        body: '3',
+        author: '3',
+      },
+    ]),
+
+    getBoardsByAuthor: jest.fn().mockImplementation((author: string) =>
+      Promise.resolve({
+        title: '1',
+        description: '1',
+        body: '1',
+        author: '1',
+      }),
+    ),
   });
 
   beforeEach(async () => {
@@ -33,8 +65,6 @@ describe('BlogController', () => {
 
     blogService = module.get<BlogService>(BlogService);
     blogController = module.get<BlogController>(BlogController);
-
-    console.log(blogService);
   });
 
   it('shoud be defined', () => {
@@ -55,6 +85,31 @@ describe('BlogController', () => {
           id: 'a uuid',
         },
       );
+    });
+  });
+
+  describe('getAllboards', () => {
+    it('should be get an array of boards', async () => {
+      await expect(blogController.getAllBoards()).resolves.toEqual([
+        {
+          title: '1',
+          description: '1',
+          body: '1',
+          author: '1',
+        },
+        {
+          title: '2',
+          description: '2',
+          body: '2',
+          author: '2',
+        },
+        {
+          title: '3',
+          description: '3',
+          body: '3',
+          author: '3',
+        },
+      ]);
     });
   });
 });

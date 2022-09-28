@@ -18,10 +18,15 @@ export class BlogService {
     private boardRepository: Repository<Board>,
   ) {}
 
-  createBoard(creatBoardDto: CreateBoardDto): Promise<Board> {
+  async createBoard(creatBoardDto: CreateBoardDto): Promise<Board> {
     try {
-      const newBoard = this.boardRepository.create(creatBoardDto);
-      return this.boardRepository.save(newBoard);
+      const board = new Board();
+      board.author = creatBoardDto.author;
+      board.body = creatBoardDto.body;
+      board.title = creatBoardDto.title;
+      board.description = creatBoardDto.description;
+      const newBoard = await this.boardRepository.save(board);
+      return newBoard;
     } catch (e) {
       throw e;
     }

@@ -31,6 +31,10 @@ export class Board {
   // @CreateDateColumn({ type: 'timestamp' })
   // date_posted: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  dated_at?: Date;
+  @Column({
+    name: 'dated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  datedAt?: Date;
 }

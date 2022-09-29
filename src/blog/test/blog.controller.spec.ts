@@ -1,10 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { BlogController } from '../blog.controller';
 import { BlogService } from '../blog.service';
 import { CreateBoardDto } from '../dto/create-board.dto';
-import { Board } from '../entity/board.entity';
 
 describe('BlogController', () => {
   let blogController: BlogController;
@@ -15,12 +12,11 @@ describe('BlogController', () => {
       .fn()
       .mockImplementation((createBoardDto: CreateBoardDto) =>
         Promise.resolve({
-          id: 'a uuid',
-          dated_at: 'date',
+          id: 'uuid',
+          date: 'date',
           ...createBoardDto,
         }),
       ),
-
     getAllBoards: jest.fn().mockResolvedValue([
       {
         title: '1',
@@ -43,12 +39,14 @@ describe('BlogController', () => {
     ]),
 
     getBoardsByAuthor: jest.fn().mockImplementation((author: string) =>
-      Promise.resolve({
-        title: '1',
-        description: '1',
-        body: '1',
-        author: '1',
-      }),
+      Promise.resolve([
+        {
+          title: '1',
+          description: '1',
+          body: '1',
+          author: '1',
+        },
+      ]),
     ),
   });
 
@@ -72,7 +70,7 @@ describe('BlogController', () => {
   });
 
   describe('createBoard', () => {
-    it('should be create a new Board', async () => {
+    it('should create a new Board', async () => {
       const newCreateBoard: CreateBoardDto = {
         title: 'test',
         description: 'test',
@@ -81,15 +79,13 @@ describe('BlogController', () => {
       };
 
       await expect(blogController.createBoard(newCreateBoard)).resolves.toEqual(
-        {
-          id: 'a uuid',
-        },
+        { id: 'uuid', date: 'date', ...newCreateBoard },
       );
     });
   });
 
   describe('getAllboards', () => {
-    it('should be get an array of boards', async () => {
+    it('should get an array of boards', async () => {
       await expect(blogController.getAllBoards()).resolves.toEqual([
         {
           title: '1',
@@ -110,6 +106,54 @@ describe('BlogController', () => {
           author: '3',
         },
       ]);
+    });
+  });
+
+  describe('getBoardsByAuthor', () => {
+    it('should return one Board', async () => {
+      await expect(
+        blogController.getBoardByAuthor('test author'),
+      ).resolves.toEqual([
+        {
+          title: '1',
+          description: '1',
+          body: '1',
+          author: '1',
+        },
+      ]);
+    });
+
+    it('should return same GetBoardResponseDto from blogService', async () => {
+      // blogService에서 반환하는 값을 제대로 사용하는지 알기 위해서 스파이 심어둠
+
+      // const blogServiceAuthorSpy = jest.spyOn(blogService, 'getBoardsByAuthor');
+      const input = 'test';
+      const expectedServiceReturnValue = [
+        {
+          id: 'uuid',
+          dated_at: new Date(),
+          title: '1',
+          description: '1',
+          body: '1',
+          author: 'test',
+        },
+        {
+          id: 'uuid',
+          dated_at: new Date(),
+          title: '2',
+          description: '2',
+          body: '2',
+          author: 'test',
+        },
+      ];
+      const blogServiceSpy = jest
+        .spyOn(blogService, 'getBoardsByAuthor')
+        .mockResolvedValueOnce(expectedServiceReturnValue);
+
+      const result = await blogController.getBoardByAuthor(input);
+
+      expect(blogServiceSpy).toHaveBeenCalledWith(input);
+      expect(result).toEqual(expectedServiceReturnValue);
     });
   });
 });

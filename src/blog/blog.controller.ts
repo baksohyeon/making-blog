@@ -25,9 +25,7 @@ export class BlogController {
   ): Promise<CreateBoardResponse> {
     try {
       const newBoard = await this.blogService.createBoard(createBoardDto);
-      return {
-        id: newBoard.id,
-      };
+      return newBoard;
     } catch (e: any) {
       switch (e.constructor.name) {
         case 'QueryFailedError':

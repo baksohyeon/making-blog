@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BlogController } from '../blog.controller';
 import { BlogService } from '../blog.service';
 import { CreateBoardDto } from '../dto/create-board.dto';
+import { UpdateBoardDto } from '../dto/update-board.dto';
 
 describe('BlogController', () => {
   let blogController: BlogController;
@@ -48,6 +49,11 @@ describe('BlogController', () => {
         },
       ]),
     ),
+
+    // updateBoard: jest.fn().mockImplementation((id: string, updateBoardDto: UpdateBoardDto) => {
+    //   return Promise
+    // })
+
   });
 
   beforeEach(async () => {
@@ -155,5 +161,10 @@ describe('BlogController', () => {
       expect(blogServiceSpy).toHaveBeenCalledWith(input);
       expect(result).toEqual(expectedServiceReturnValue);
     });
+  });
+
+  describe('updateBoard', () => {
+    it('should be updated', async () => )
+
   });
 });

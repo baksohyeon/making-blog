@@ -63,7 +63,7 @@ export class BlogService {
   async updateBoard(
     id: string,
     updateBoardDto: UpdateBoardDto,
-  ): Promise<UpdateResult> {
+  ): Promise<string> {
     try {
       const board = await this.boardRepository.findOne({
         where: {
@@ -71,7 +71,7 @@ export class BlogService {
         },
       });
       if (board) {
-        return this.boardRepository.update(
+        const updatedResult = await this.boardRepository.update(
           {
             id,
           },
@@ -82,9 +82,14 @@ export class BlogService {
             description: updateBoardDto.description,
           },
         );
+
+        if (updatedResult.affected === 0) {
+          return 'Reject update request since Corresponding ID is not existed';
+        }
+        return 'updated!';
       }
       throw new NotFoundException(
-        'Reject update request since it is not available ID',
+        'Reject update request since Corresponding ID is not existed',
       );
     } catch (e) {
       throw e;

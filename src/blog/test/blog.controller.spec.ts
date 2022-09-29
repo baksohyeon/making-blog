@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { stringify } from 'querystring';
+import { UpdateResult } from 'typeorm';
 import { BlogController } from '../blog.controller';
 import { BlogService } from '../blog.service';
 import { CreateBoardDto } from '../dto/create-board.dto';
@@ -8,6 +10,7 @@ describe('BlogController', () => {
   let blogController: BlogController;
   let blogService: BlogService;
 
+  // TODO: 서비스 로직 모킹
   const mockBlogService = () => ({
     createBoard: jest
       .fn()
@@ -50,10 +53,11 @@ describe('BlogController', () => {
       ]),
     ),
 
-    // updateBoard: jest.fn().mockImplementation((id: string, updateBoardDto: UpdateBoardDto) => {
-    //   return Promise
-    // })
-
+    updateBoard: jest
+      .fn()
+      .mockImplementation((id: string, updateBoardDto: UpdateBoardDto) => {
+        return Promise<string>;
+      }),
   });
 
   beforeEach(async () => {
@@ -164,7 +168,18 @@ describe('BlogController', () => {
   });
 
   describe('updateBoard', () => {
-    it('should be updated', async () => )
+    it('should be updated', async () => {
+      const updateDto: UpdateBoardDto = {
+        title: 'updated title',
+        description: 'updated description',
+        body: 'updated body',
+        author: 'updated author',
+      };
 
+      const result = new UpdateResult();
+      await expect(
+        blogController.updateBoard('id', updateDto),
+      ).resolves.toEqual(result);
+    });
   });
 });

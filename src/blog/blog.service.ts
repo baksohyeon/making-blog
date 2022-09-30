@@ -59,7 +59,7 @@ export class BlogService {
   async updateBoard(
     id: string,
     updateBoardDto: UpdateBoardDto,
-  ): Promise<UpdateResult> {
+  ): Promise<GetBoardResponseDto> {
     try {
       const board = await this.boardRepository.findOne({
         where: {
@@ -67,7 +67,7 @@ export class BlogService {
         },
       });
       if (board) {
-        return this.boardRepository.update(
+        await this.boardRepository.update(
           {
             id,
           },
@@ -78,6 +78,12 @@ export class BlogService {
             description: updateBoardDto.description,
           },
         );
+        const updatedBoard = await this.boardRepository.findOne({
+          where: {
+            id,
+          },
+        });
+        return updatedBoard as GetBoardResponseDto;
       }
       throw new NotFoundException(
         'Reject update request since it is not available ID',

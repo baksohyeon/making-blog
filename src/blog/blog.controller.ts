@@ -69,7 +69,7 @@ export class BlogController {
     @Param('id') id: string,
     @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<GetBoardResponseDto> {
-    return await this.blogService.updateBoard(id, updateBoardDto);
+    return await this.boardService.updateBoard(id, updateBoardDto);
   }
 
   @Delete('/:id')

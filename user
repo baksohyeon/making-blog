@@ -1,0 +1,155 @@
+├── .eslintrc.js
+├── .gitignore
+├── .prettierrc
+├── coverage
+│  ├── clover.xml
+│  ├── coverage-final.json
+│  ├── lcov-report
+│  │  ├── base.css
+│  │  ├── block-navigation.js
+│  │  ├── favicon.png
+│  │  ├── index.html
+│  │  ├── prettify.css
+│  │  ├── prettify.js
+│  │  ├── sort-arrow-sprite.png
+│  │  ├── sorter.js
+│  │  └── src
+│  │    ├── app.controller.ts.html
+│  │    ├── app.module.ts.html
+│  │    ├── app.service.ts.html
+│  │    ├── blog
+│  │    │  ├── blog.controller.ts.html
+│  │    │  ├── blog.module.ts.html
+│  │    │  ├── blog.service.ts.html
+│  │    │  ├── dto
+│  │    │  │  ├── create-board.dto.ts.html
+│  │    │  │  ├── delete-board.dto.ts.html
+│  │    │  │  ├── index.html
+│  │    │  │  ├── read-board.dto.ts.html
+│  │    │  │  └── update-board.dto.ts.html
+│  │    │  ├── entity
+│  │    │  │  ├── board.entity.ts.html
+│  │    │  │  └── index.html
+│  │    │  └── index.html
+│  │    ├── databaseConfig.ts.html
+│  │    ├── index.html
+│  │    └── main.ts.html
+│  └── lcov.info
+├── dev.env
+├── dist
+│  ├── app.controller.d.ts
+│  ├── app.controller.js
+│  ├── app.controller.js.map
+│  ├── app.module.d.ts
+│  ├── app.module.js
+│  ├── app.module.js.map
+│  ├── app.service.d.ts
+│  ├── app.service.js
+│  ├── app.service.js.map
+│  ├── auth
+│  │  ├── auth.module.d.ts
+│  │  ├── auth.module.js
+│  │  └── auth.module.js.map
+│  ├── blog
+│  │  ├── blog.controller.d.ts
+│  │  ├── blog.controller.js
+│  │  ├── blog.controller.js.map
+│  │  ├── blog.module.d.ts
+│  │  ├── blog.module.js
+│  │  ├── blog.module.js.map
+│  │  ├── blog.service.d.ts
+│  │  ├── blog.service.js
+│  │  ├── blog.service.js.map
+│  │  ├── dto
+│  │  │  ├── create-board.dto.d.ts
+│  │  │  ├── create-board.dto.js
+│  │  │  ├── create-board.dto.js.map
+│  │  │  ├── delete-board.dto.d.ts
+│  │  │  ├── delete-board.dto.js
+│  │  │  ├── delete-board.dto.js.map
+│  │  │  ├── read-board.dto.d.ts
+│  │  │  ├── read-board.dto.js
+│  │  │  ├── read-board.dto.js.map
+│  │  │  ├── update-board.dto.d.ts
+│  │  │  ├── update-board.dto.js
+│  │  │  └── update-board.dto.js.map
+│  │  ├── entity
+│  │  │  ├── board.entity.d.ts
+│  │  │  ├── board.entity.js
+│  │  │  └── board.entity.js.map
+│  │  ├── middlewares
+│  │  │  ├── authentication.middleware.d.ts
+│  │  │  ├── authentication.middleware.js
+│  │  │  ├── authentication.middleware.js.map
+│  │  │  ├── validate-board.middleware.d.ts
+│  │  │  ├── validate-board.middleware.js
+│  │  │  └── validate-board.middleware.js.map
+│  │  ├── pipes
+│  │  │  ├── validation.pipe.d.ts
+│  │  │  ├── validation.pipe.js
+│  │  │  └── validation.pipe.js.map
+│  │  └── test
+│  │    ├── juna.d.ts
+│  │    ├── juna.js
+│  │    └── juna.js.map
+│  ├── databaseConfig.d.ts
+│  ├── databaseConfig.js
+│  ├── databaseConfig.js.map
+│  ├── main.d.ts
+│  ├── main.js
+│  ├── main.js.map
+│  └── tsconfig.build.tsbuildinfo
+├── nest-cli.json
+├── package.json
+├── README.md
+├── src
+│  ├── app.controller.ts
+│  ├── app.module.ts
+│  ├── app.service.ts
+│  ├── auth
+│  │  ├── auth.module.ts
+│  │  ├── controllers
+│  │  │  └── auth
+│  │  │    ├── auth.controller.spec.ts
+│  │  │    └── auth.controller.ts
+│  │  ├── services
+│  │  │  └── auth
+│  │  │    ├── auth.service.spec.ts
+│  │  │    └── auth.service.ts
+│  │  └── utils
+│  │    └── LocalStrategy.ts
+│  ├── blog
+│  │  ├── blog.controller.ts
+│  │  ├── blog.module.ts
+│  │  ├── blog.service.ts
+│  │  ├── dto
+│  │  │  ├── create-board.dto.ts
+│  │  │  ├── delete-board.dto.ts
+│  │  │  ├── read-board.dto.ts
+│  │  │  └── update-board.dto.ts
+│  │  ├── entity
+│  │  │  └── board.entity.ts
+│  │  ├── pipes
+│  │  │  └── validation.pipe.ts
+│  │  └── test
+│  ├── databaseConfig.ts
+│  ├── main.ts
+│  └── user
+│    ├── controllers
+│    │  └── user
+│    │    ├── user.controller.spec.ts
+│    │    └── user.controller.ts
+│    ├── dto
+│    ├── entity
+│    │  └── user.entity.ts
+│    ├── services
+│    │  └── user
+│    │    ├── user.service.spec.ts
+│    │    └── user.service.ts
+│    └── user.module.ts
+├── test
+│  └── jest-e2e.json
+├── tsconfig.build.json
+├── tsconfig.json
+├── yarn-error.log
+└── yarn.lock

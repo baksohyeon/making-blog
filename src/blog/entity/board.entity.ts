@@ -10,8 +10,6 @@ import {
 
 @Entity()
 export class Board {
-  // @PrimaryColumn({ type: 'binary', length: 16 })
-  // id!: Buffer;
   @PrimaryColumn({ type: 'binary' })
   @Generated('uuid')
   id: string;

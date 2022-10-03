@@ -50,7 +50,7 @@ export class BlogService {
       return boards.map((board) => board as GetBoardResponseDto);
     } catch (e) {
       if (e.constructor.name === 'NotFoundException') {
-        throw e;
+        throw new NotFoundException(e);
       }
       throw new InternalServerErrorException(e);
     }

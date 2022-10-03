@@ -13,7 +13,6 @@ import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
-import { UpdateResult } from 'typeorm';
 
 @Controller('blog')
 export class BlogController {

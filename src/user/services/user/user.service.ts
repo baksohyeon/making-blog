@@ -43,7 +43,7 @@ export class UserService {
     }
   }
 
-  async getUserbyAuthor(author: string) {
+  async getUserbyAuthor(author: string): Promise<GetUserResponseDto> {
     try {
       const userSelectedById = await this.userRepository.findOne({
         where: {
@@ -53,7 +53,7 @@ export class UserService {
       if (!userSelectedById) {
         throw new NotFoundException(`Corresponding user is not Exists.`);
       }
-      return userSelectedById;
+      return userSelectedById as GetUserResponseDto;
     } catch (e) {
       if (e.constructor.name !== 'NotFoundException') {
         throw new BadRequestException();

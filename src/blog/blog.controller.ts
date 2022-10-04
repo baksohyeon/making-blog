@@ -7,16 +7,23 @@ import {
   InternalServerErrorException,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
+import { AuthService } from 'src/auth/services/auth/auth.service';
+import { LocalAuthGuard } from 'src/auth/guard/local-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('blog')
 export class BlogController {
-  constructor(private readonly boardService: BlogService) {}
+  constructor(
+    private readonly boardService: BlogService,
+    private readonly authService: AuthService,
+  ) {}
 
   // submit a post
   @Post('/post')
@@ -44,6 +51,7 @@ export class BlogController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/all')
   async getAllBoards(): Promise<GetBoardResponseDto[]> {
     try {

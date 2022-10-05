@@ -26,22 +26,22 @@ export class UserService {
     }
   }
 
-  getUserbyId(id: number) {
-    try {
-      const userSelectedById = this.userRepository.find({
-        where: {
-          id,
-        },
-      });
-      if (!userSelectedById) {
-        throw new NotFoundException(`Corresponding user is not Exists.`);
-      }
-    } catch (e) {
-      if (e.constructor.name !== 'NotFoundException') {
-        throw new BadRequestException();
-      }
-    }
-  }
+  // getUserbyId(id: number) {
+  //   try {
+  //     const userSelectedById = this.userRepository.find({
+  //       where: {
+  //         id,
+  //       },
+  //     });
+  //     if (!userSelectedById) {
+  //       throw new NotFoundException(`Corresponding user is not Exists.`);
+  //     }
+  //   } catch (e) {
+  //     if (e.constructor.name !== 'NotFoundException') {
+  //       throw new BadRequestException();
+  //     }
+  //   }
+  // }
 
   async getUserbyAuthor(author: string): Promise<GetUserResponseDto> {
     try {
@@ -60,4 +60,6 @@ export class UserService {
       } else throw e;
     }
   }
+
+  // TODO: Update, DELETE 구현하기
 }

@@ -13,20 +13,17 @@ export class AuthService {
 
   // validateUser: LocalStrategy에서 호출한다. username/password 로그인 유효성을 login 호출 이전에 체크한다.
   async validateAuthor(authorName: string, pass: string): Promise<any> {
-    try {
-      const author = await this.userService.getUserbyAuthor(authorName);
-      if (author && author.password === pass) {
-        const { password, ...result } = author; // password 빼고 나머지 정보를 result에 저장
-        return result;
-      }
-    } catch (e) {
-      throw e;
+    const author = await this.userService.getUserbyAuthor(authorName);
+    if (author && author.password === pass) {
+      const { password, ...result } = author; // password 빼고 나머지 정보를 result에 저장
+      return result;
     }
+    return null;
   }
 
   // login: validate user인 경우 사용자 정보를 통한 webtoken 생성
   async login(user: any) {
-    const payload = { authorName: user.author, sub: user.id };
+    const payload = { author: user.author, userId: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };

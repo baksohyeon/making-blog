@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { GetUserResponseDto } from 'src/user/dto/read-board.dto';
 import { User } from 'src/user/entity/user.entity';
+import { encodePassword } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -18,9 +19,10 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<GetUserResponseDto> {
     try {
+      const hashedPassword = await encodePassword(createUserDto.password);
       const user = new User();
       user.author = createUserDto.author;
-      user.password = createUserDto.password;
+      user.password = hashedPassword;
 
       const newUser = this.userRepository.create(user);
       await this.userRepository.save(newUser);
@@ -30,34 +32,17 @@ export class UserService {
     }
   }
 
-  // getUserbyId(id: number) {
-  //   try {
-  //     const userSelectedById = this.userRepository.find({
-  //       where: {
-  //         id,
-  //       },
-  //     });
-  //     if (!userSelectedById) {
-  //       throw new NotFoundException(`Corresponding user is not Exists.`);
-  //     }
-  //   } catch (e) {
-  //     if (e.constructor.name !== 'NotFoundException') {
-  //       throw new BadRequestException();
-  //     }
-  //   }
-  // }
-
   async getUserbyAuthor(author: string): Promise<GetUserResponseDto> {
     try {
-      const userSelectedById = await this.userRepository.findOne({
+      const userSelectedByAuthor = await this.userRepository.findOne({
         where: {
           author,
         },
       });
-      if (!userSelectedById) {
+      if (!userSelectedByAuthor) {
         throw new NotFoundException(`Corresponding user is not Exists.`);
       }
-      return userSelectedById as GetUserResponseDto;
+      return userSelectedByAuthor as GetUserResponseDto;
     } catch (e) {
       if (e.constructor.name !== 'NotFoundException') {
         throw new BadRequestException();

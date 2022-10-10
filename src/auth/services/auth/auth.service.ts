@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   // login: validate user인 경우 사용자 정보를 통한 webtoken 생성
-  async login(user: any) {
+  async login(user: { id: number; author: string }) {
     const payload = { author: user.author, userId: user.id };
     return {
       access_token: this.jwtService.sign(payload),

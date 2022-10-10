@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
@@ -70,28 +70,31 @@ export class BlogService {
           id,
         },
       });
-      if (board) {
-        await this.boardRepository.update(
-          {
-            id,
-          },
-          {
-            title: updateBoardDto.title,
-            author: updateBoardDto.author,
-            body: updateBoardDto.body,
-            description: updateBoardDto.description,
-          },
-        );
-        const updatedBoard = await this.boardRepository.findOne({
-          where: {
-            id,
-          },
-        });
-        return updatedBoard as GetBoardResponseDto;
-      }
-      throw new NotFoundException(
-        'Reject update request since Corresponding ID is not existed',
-      );
+      return await this.boardRepository.manager.transaction(async (manager) => {
+        if (board) {
+          await manager.update(
+            Board,
+            {
+              id,
+            },
+            {
+              title: updateBoardDto.title,
+              author: updateBoardDto.author,
+              body: updateBoardDto.body,
+              description: updateBoardDto.description,
+            },
+          );
+          const updatedBoard = await manager.findOne(Board, {
+            where: {
+              id,
+            },
+          });
+          return updatedBoard as GetBoardResponseDto;
+          // throw new NotFoundException(
+          //   'Reject update request since Corresponding ID is not existed',
+          //   );
+        }
+      });
     } catch (e) {
       throw e;
     }

@@ -13,7 +13,13 @@ export class AuthService {
   ) {}
 
   // validateUser: LocalStrategy에서 호출한다. username/password 로그인 유효성을 login 호출 이전에 체크한다.
-  async validateAuthor(authorName: string, password: string): Promise<any> {
+  async validateAuthor(
+    authorName: string,
+    password: string,
+  ): Promise<{
+    id: number;
+    author: string;
+  }> {
     const authorInfo = await this.userService.getUserbyAuthor(authorName);
     if (authorInfo) {
       // 찾는 author에 해당하는 값이 있을 경우

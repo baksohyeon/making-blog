@@ -13,7 +13,8 @@ import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
-import { UpdateResult } from 'typeorm';
+import { AuthService } from 'src/auth/services/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('blog')
 export class BlogController {

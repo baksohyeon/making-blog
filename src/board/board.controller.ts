@@ -8,15 +8,15 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { BlogService } from './blog.service';
+import { BoardService } from './board.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
 
 @Controller('blog')
-export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+export class BoardController {
+  constructor(private readonly boardService: BoardService) {}
 
   // submit a post
   @Post('/post')
@@ -24,7 +24,7 @@ export class BlogController {
     @Body() createBoardDto: CreateBoardDto,
   ): Promise<CreateBoardResponse> {
     try {
-      const newBoard = await this.blogService.createBoard(createBoardDto);
+      const newBoard = await this.boardService.createBoard(createBoardDto);
       return newBoard;
     } catch (e: any) {
       switch (e.constructor.name) {
@@ -45,7 +45,7 @@ export class BlogController {
   @Get('/all')
   async getAllBoards(): Promise<GetBoardResponseDto[]> {
     try {
-      const allBoards = (await this.blogService.getAllBoards()).map(
+      const allBoards = (await this.boardService.getAllBoards()).map(
         (board) => board as GetBoardResponseDto,
       );
       return allBoards;
@@ -58,7 +58,7 @@ export class BlogController {
   async getBoardByAuthor(
     @Param('author') author: string,
   ): Promise<GetBoardResponseDto[]> {
-    return this.blogService.getBoardsByAuthor(author);
+    return this.boardService.getBoardsByAuthor(author);
   }
 
   @Post('/:id')
@@ -66,14 +66,13 @@ export class BlogController {
     @Param('id') id: string,
     @Body() updateBoardDto: UpdateBoardDto,
   ): Promise<GetBoardResponseDto> {
-    const updatedBoard = await this.blogService.updateBoard(id, updateBoardDto);
-    return updatedBoard;
+    return this.boardService.updateBoard(id, updateBoardDto);
   }
 
   @Delete('/:id')
   async deleteBoard(@Param('id') id: string): Promise<DeleteBoardResponseDto> {
     try {
-      const board = await this.blogService.deleteBoard(id);
+      const board = await this.boardService.deleteBoard(id);
       return board;
     } catch (e) {
       throw e;

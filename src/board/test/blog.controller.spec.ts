@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { stringify } from 'querystring';
 import { UpdateResult } from 'typeorm';
-import { BlogController } from '../blog.controller';
-import { BlogService } from '../blog.service';
+import { BoardController } from '../board.controller';
+import { BoardService } from '../board.service';
 import { CreateBoardDto } from '../dto/create-board.dto';
 import { GetBoardResponseDto } from '../dto/read-board.dto';
 import { UpdateBoardDto } from '../dto/update-board.dto';
 
 describe('BlogController', () => {
-  let blogController: BlogController;
-  let blogService: BlogService;
+  let blogController: BoardController;
+  let blogService: BoardService;
 
   // TODO: 서비스 로직 모킹
   const mockBlogService = () => ({
@@ -84,17 +84,17 @@ describe('BlogController', () => {
   // TODO: 모듈 설정
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [BlogController],
+      controllers: [BoardController],
       providers: [
         {
-          provide: BlogService,
+          provide: BoardService,
           useValue: mockBlogService(),
         },
       ],
     }).compile();
 
-    blogService = module.get<BlogService>(BlogService);
-    blogController = module.get<BlogController>(BlogController);
+    blogService = module.get<BoardService>(BoardService);
+    blogController = module.get<BoardController>(BoardController);
   });
 
   // TODO: 테스트 코드 짜기

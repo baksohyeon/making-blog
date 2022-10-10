@@ -13,7 +13,7 @@ import { GetBoardResponseDto } from './dto/read-board.dto';
 import { Board } from './entity/board.entity';
 
 @Injectable()
-export class BlogService {
+export class BoardService {
   constructor(
     @InjectRepository(Board)
     private boardRepository: Repository<Board>,
@@ -74,28 +74,14 @@ export class BlogService {
       if (board) {
         return await this.boardRepository.manager.transaction(
           async (manager) => {
-            await manager.update(
-              Board,
-              {
-                id,
-              },
-              {
-                title: updateBoardDto.title,
-                author: updateBoardDto.author,
-                body: updateBoardDto.body,
-                description: updateBoardDto.description,
-              },
-            );
-            const updatedBoard = await manager.findOne(Board, {
-              where: {
-                id,
-              },
-            });
+            (board.title = updateBoardDto.title),
+              (board.author = updateBoardDto.author),
+              (board.body = updateBoardDto.body),
+              (board.description = updateBoardDto.description);
 
-            if (!updatedBoard) {
-              throw new BadRequestException('hello');
-            }
-            return updatedBoard as GetBoardResponseDto;
+            const savedBoard = await manager.save(board);
+
+            return savedBoard as GetBoardResponseDto;
           },
         );
       } else {

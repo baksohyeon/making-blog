@@ -1,8 +1,8 @@
 import { AppController } from 'src/app.controller';
 import { AppService } from 'src/app.service';
 import { Repository } from 'typeorm';
-import { BlogController } from '../blog.controller';
-import { BlogService } from '../blog.service';
+import { BoardController } from '../board.controller';
+import { BoardService } from '../board.service';
 import { Board } from '../entity/board.entity';
 
 describe('BlogController', () => {
@@ -15,8 +15,8 @@ describe('BlogController', () => {
         } as Board),
       ),
     } as unknown as Repository<Board>;
-    const blogServiceTest = new BlogService(boardRepositoryTest);
-    const blogControllerTest = new BlogController(blogServiceTest);
+    const blogServiceTest = new BoardService(boardRepositoryTest);
+    const blogControllerTest = new BoardController(blogServiceTest);
 
     const controllerResult = await blogControllerTest.createBoard({
       title: 'hello',

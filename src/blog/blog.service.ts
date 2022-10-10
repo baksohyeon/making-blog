@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -70,31 +71,38 @@ export class BlogService {
           id,
         },
       });
-      return await this.boardRepository.manager.transaction(async (manager) => {
-        if (board) {
-          await manager.update(
-            Board,
-            {
-              id,
-            },
-            {
-              title: updateBoardDto.title,
-              author: updateBoardDto.author,
-              body: updateBoardDto.body,
-              description: updateBoardDto.description,
-            },
-          );
-          const updatedBoard = await manager.findOne(Board, {
-            where: {
-              id,
-            },
-          });
-          return updatedBoard as GetBoardResponseDto;
-          // throw new NotFoundException(
-          //   'Reject update request since Corresponding ID is not existed',
-          //   );
-        }
-      });
+      if (board) {
+        return await this.boardRepository.manager.transaction(
+          async (manager) => {
+            await manager.update(
+              Board,
+              {
+                id,
+              },
+              {
+                title: updateBoardDto.title,
+                author: updateBoardDto.author,
+                body: updateBoardDto.body,
+                description: updateBoardDto.description,
+              },
+            );
+            const updatedBoard = await manager.findOne(Board, {
+              where: {
+                id,
+              },
+            });
+
+            if (!updatedBoard) {
+              throw new BadRequestException('hello');
+            }
+            return updatedBoard as GetBoardResponseDto;
+          },
+        );
+      } else {
+        throw new NotFoundException(
+          'Reject update request since Corresponding ID is not existed',
+        );
+      }
     } catch (e) {
       throw e;
     }

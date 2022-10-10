@@ -15,7 +15,6 @@ import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
 import { AuthService } from 'src/auth/services/auth/auth.service';
-import { LocalAuthGuard } from 'src/auth/guard/local-auth.guard';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('blog')

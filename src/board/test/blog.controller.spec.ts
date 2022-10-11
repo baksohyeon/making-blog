@@ -210,26 +210,4 @@ describe('BlogController', () => {
       expect(result).toEqual(expectedServiceReturnValue);
     });
   });
-
-  // describe('updateBoard', () => {
-  //   it('should be updated', async () => {
-  //     const updateDto: UpdateBoardDto = {
-  //       title: 'title',
-  //       description: 'description',
-  //       body: 'body',
-  //       author: 'author',
-  //     };
-
-  //     await expect(
-  //       blogController.updateBoard('id', updateDto),
-  //     ).resolves.toEqual({
-  //       id: 'uuid',
-  //       date: 'date',
-  //       title: 'title',
-  //       description: 'description',
-  //       body: 'body',
-  //       author: 'author',
-  //     });
-  //   });
-  // });
 });

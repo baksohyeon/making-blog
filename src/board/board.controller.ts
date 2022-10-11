@@ -24,8 +24,7 @@ export class BoardController {
     @Body() createBoardDto: CreateBoardDto,
   ): Promise<CreateBoardResponse> {
     try {
-      const newBoard = await this.boardService.createBoard(createBoardDto);
-      return newBoard;
+      return this.boardService.createBoard(createBoardDto);
     } catch (e: any) {
       switch (e.constructor.name) {
         case 'QueryFailedError':

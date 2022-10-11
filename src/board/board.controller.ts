@@ -8,15 +8,15 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { BlogService } from './blog.service';
+import { BoardService } from './board.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
 import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
 
 @Controller('blog')
-export class BlogController {
-  constructor(private readonly boardService: BlogService) {}
+export class BoardController {
+  constructor(private readonly boardService: BoardService) {}
 
   // submit a post
   @Post('/post')
@@ -24,10 +24,7 @@ export class BlogController {
     @Body() createBoardDto: CreateBoardDto,
   ): Promise<CreateBoardResponse> {
     try {
-      const newBoard = await this.boardService.createBoard(createBoardDto);
-      return {
-        id: newBoard.id,
-      };
+      return this.boardService.createBoard(createBoardDto);
     } catch (e: any) {
       switch (e.constructor.name) {
         case 'QueryFailedError':
@@ -67,8 +64,8 @@ export class BlogController {
   async updateBoard(
     @Param('id') id: string,
     @Body() updateBoardDto: UpdateBoardDto,
-  ) {
-    return await this.boardService.updateBoard(id, updateBoardDto);
+  ): Promise<GetBoardResponseDto> {
+    return this.boardService.updateBoard(id, updateBoardDto);
   }
 
   @Delete('/:id')

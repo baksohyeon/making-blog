@@ -72,7 +72,7 @@ export class BoardService {
         },
       });
       if (board) {
-        return await this.boardRepository.manager.transaction(
+        const updatedBoard = await this.boardRepository.manager.transaction(
           async (manager) => {
             (board.title = updateBoardDto.title),
               (board.author = updateBoardDto.author),
@@ -84,6 +84,7 @@ export class BoardService {
             return savedBoard as GetBoardResponseDto;
           },
         );
+        return updatedBoard;
       } else {
         throw new NotFoundException(
           'Reject update request since Corresponding ID is not existed',

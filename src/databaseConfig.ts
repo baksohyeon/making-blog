@@ -14,7 +14,7 @@ export const DatabaseConfig = {
   type: 'mysql',
   // driver: 'mysql',
   database: process.env.DATABASE_NAME || 'blog',
-  port: parseInt(process.env.DATABASE_PORT) || 3306,
+  port: parseInt(process.env.DATABASE_PORT ?? '3306'),
   username: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,
   host: process.env.DATABASE_HOST,

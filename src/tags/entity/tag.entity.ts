@@ -1,7 +1,7 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export class Tags {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({})
   tag_id: number;
 
   @Column()

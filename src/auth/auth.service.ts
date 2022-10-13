@@ -19,7 +19,7 @@ export class AuthService {
   ): Promise<{
     id: number;
     author: string;
-  }> {
+  } | null> {
     const authorInfo = await this.userService.getUserbyAuthor(authorName);
     if (authorInfo) {
       // 찾는 author에 해당하는 값이 있을 경우

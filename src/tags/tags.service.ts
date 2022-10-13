@@ -13,6 +13,8 @@ export class TagsService {
 
   async getAllTags() {
     const tags = await this.tagRepository.find();
-    return tags.map((tag) => tag as GetTagResponseDto);
+    return {
+      tags: tags.map((tag) => tag.tagName),
+    };
   }
 }

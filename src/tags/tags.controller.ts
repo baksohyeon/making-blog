@@ -7,7 +7,7 @@ export class TagsController {
   constructor(private readonly tagService: TagsService) {}
 
   @Get()
-  async getAllTags(): Promise<GetTagResponseDto[]> {
+  async getAllTags(): Promise<{ tags: string[] }> {
     return this.tagService.getAllTags();
   }
 }

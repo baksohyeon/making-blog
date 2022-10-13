@@ -5,23 +5,23 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { GetUserResponseDto } from 'src/user/dto/read-board.dto';
-import { User } from 'src/user/entity/user.entity';
+import { GetUserResponseDto } from 'src/user/dto/read-user.dto';
+import { Users } from 'src/user/entity/users.entity';
 import { encodePassword } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectRepository(Users)
+    private userRepository: Repository<Users>,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<GetUserResponseDto> {
     try {
       const hashedPassword = await encodePassword(createUserDto.password);
-      const user = new User();
-      user.author = createUserDto.author;
+      const user = new Users();
+      user.username = createUserDto.username;
       user.password = hashedPassword;
 
       const newUser = this.userRepository.create(user);
@@ -32,11 +32,11 @@ export class UserService {
     }
   }
 
-  async getUserbyAuthor(author: string): Promise<GetUserResponseDto> {
+  async getUserbyAuthor(username: string): Promise<GetUserResponseDto> {
     try {
       const userSelectedByAuthor = await this.userRepository.findOne({
         where: {
-          author,
+          username: username,
         },
       });
       if (!userSelectedByAuthor) {
@@ -49,6 +49,4 @@ export class UserService {
       } else throw e;
     }
   }
-
-  // TODO: Update, DELETE 구현하기
 }

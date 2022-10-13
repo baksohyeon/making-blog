@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto, CreateBoardResponse } from './dto/create-board.dto';
-import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
 
@@ -69,7 +68,7 @@ export class BoardController {
   }
 
   @Delete('/:id')
-  async deleteBoard(@Param('id') id: string): Promise<DeleteBoardResponseDto> {
+  async deleteBoard(@Param('id') id: string): Promise<GetBoardResponseDto> {
     try {
       const board = await this.boardService.deleteBoard(id);
       return board;

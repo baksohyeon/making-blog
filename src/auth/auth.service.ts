@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/services/user/user.service';
+import { UserService } from 'src/user/user.service';
 import { comparePasswords } from 'src/utils/bcrypt';
 
 // 대부분 검증작업은 여기에서 진행됨
@@ -13,13 +13,7 @@ export class AuthService {
   ) {}
 
   // validateUser: LocalStrategy에서 호출한다. username/password 로그인 유효성을 login 호출 이전에 체크한다.
-  async validateAuthor(
-    authorName: string,
-    password: string,
-  ): Promise<{
-    id: number;
-    author: string;
-  } | null> {
+  async validateAuthor(authorName: string, password: string) {
     const authorInfo = await this.userService.getUserbyAuthor(authorName);
     if (authorInfo) {
       // 찾는 author에 해당하는 값이 있을 경우

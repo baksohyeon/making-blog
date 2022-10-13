@@ -1,13 +1,21 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class GetBoardResponseDto {
+  @IsNotEmpty()
   id: string;
 
+  @IsNotEmpty()
   title: string;
 
+  @IsNotEmpty()
   description: string;
 
+  @IsNotEmpty()
   body: string;
 
-  author: string;
+  @IsNotEmpty()
+  username: string;
 
-  dated_at: Date;
+  @IsNotEmpty()
+  datedAt: Date;
 }

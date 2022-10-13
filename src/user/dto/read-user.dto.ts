@@ -1,5 +1,7 @@
 export class GetUserResponseDto {
   id: number;
-  author: string;
+  username: string;
   password: string;
+  email: string;
+  bio?: string;
 }

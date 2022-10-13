@@ -26,7 +26,7 @@ export class Board {
   body: string;
 
   @Column()
-  author: string;
+  username: string;
 
   // @CreateDateColumn({ type: 'timestamp' })
   // date_posted: Date;

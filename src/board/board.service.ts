@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -8,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { DeleteBoardResponseDto } from './dto/delete-board.dto';
 import { GetBoardResponseDto } from './dto/read-board.dto';
 import { Board } from './entity/board.entity';
 
@@ -22,10 +20,10 @@ export class BoardService {
   async createBoard(creatBoardDto: CreateBoardDto): Promise<Board> {
     try {
       const board = new Board();
-      board.author = creatBoardDto.author;
-      board.body = creatBoardDto.body;
       board.title = creatBoardDto.title;
       board.description = creatBoardDto.description;
+      board.body = creatBoardDto.body;
+      board.username = creatBoardDto.username;
       const newBoard = await this.boardRepository.save(board);
       return newBoard;
     } catch (e) {
@@ -49,7 +47,7 @@ export class BoardService {
     try {
       const boards = await this.boardRepository.find({
         where: {
-          author,
+          username: author,
         },
       });
       return boards.map((board) => board as GetBoardResponseDto);
@@ -71,23 +69,25 @@ export class BoardService {
           id,
         },
       });
-      if (board) {
-        const updatedBoard = await this.boardRepository.manager.transaction(
+
+      if (!board) {
+        throw new NotFoundException(
+          'Reject update request since Corresponding ID is not existed',
+        );
+      } else {
+        return await this.boardRepository.manager.transaction(
           async (manager) => {
-            (board.title = updateBoardDto.title),
-              (board.author = updateBoardDto.author),
-              (board.body = updateBoardDto.body),
-              (board.description = updateBoardDto.description);
+            let newBoard = new Board();
+            newBoard.title = updateBoardDto.title || board.title;
+            newBoard.username = updateBoardDto.username || board.username;
+            newBoard.body = updateBoardDto.body || board.body;
+            newBoard.description =
+              updateBoardDto.description || board.description;
 
             const savedBoard = await manager.save(board);
 
             return savedBoard as GetBoardResponseDto;
           },
-        );
-        return updatedBoard;
-      } else {
-        throw new NotFoundException(
-          'Reject update request since Corresponding ID is not existed',
         );
       }
     } catch (e) {
@@ -95,7 +95,7 @@ export class BoardService {
     }
   }
 
-  async deleteBoard(id: string): Promise<DeleteBoardResponseDto> {
+  async deleteBoard(id: string): Promise<GetBoardResponseDto> {
     try {
       const droppedBoard = await this.boardRepository.findOne({
         where: {
@@ -106,7 +106,7 @@ export class BoardService {
         throw new NotFoundException('Corresponding ID is not found');
       } else {
         this.boardRepository.delete(id);
-        return droppedBoard as DeleteBoardResponseDto;
+        return droppedBoard as GetBoardResponseDto;
       }
     } catch (e) {
       if (e.constructor.name === 'NotFoundException') {

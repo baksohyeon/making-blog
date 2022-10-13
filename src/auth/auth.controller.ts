@@ -1,5 +1,5 @@
 import { Controller, InternalServerErrorException } from '@nestjs/common';
-import { UserService } from 'src/user/services/user/user.service';
+import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

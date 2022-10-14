@@ -29,7 +29,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('/author/:author')
   async getUserByauthor(@Param('author') author: string) {
-    const user = this.userService.getUserbyAuthor(author);
+    const user = this.userService.getUserbyUsername(author);
     return user;
   }
 }

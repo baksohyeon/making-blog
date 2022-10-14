@@ -53,7 +53,7 @@ export class UserService {
     }
   }
 
-  async getUserbyAuthor(username: string): Promise<GetUserResponseDto> {
+  async getUserbyUsername(username: string): Promise<GetUserResponseDto> {
     try {
       const userSelectedByAuthor = await this.userRepository.findOne({
         where: {

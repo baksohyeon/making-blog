@@ -16,7 +16,7 @@ export class CreateBoardDto {
 
   @IsNotEmpty()
   @IsString()
-  readonly author: string;
+  readonly username: string;
 }
 
 export class CreateBoardResponse {

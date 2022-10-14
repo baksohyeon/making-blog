@@ -11,12 +11,12 @@ async function bootstrap() {
     origin: ['http://localhost:3001'],
     credentials: true,
   });
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //     forbidNonWhitelisted: true,
+  //   }),
+  // );
   await app.listen(3000);
 }
 bootstrap();

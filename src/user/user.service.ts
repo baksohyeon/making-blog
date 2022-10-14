@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -8,7 +10,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { GetUserResponseDto } from 'src/user/dto/read-user.dto';
 import { Users } from 'src/user/entity/users.entity';
 import { encodePassword } from 'src/utils/bcrypt';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -19,14 +21,33 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<GetUserResponseDto> {
     try {
-      const hashedPassword = await encodePassword(createUserDto.password);
-      const user = new Users();
-      user.username = createUserDto.username;
-      user.password = hashedPassword;
+      // transaction 사용
+      return await this.userRepository.manager.transaction(
+        async (transactionManager) => {
+          const userByEmail = await this.userRepository.findOne({
+            where: {
+              email: createUserDto.email,
+            },
+          });
+          const userByUsername = await this.userRepository.findOne({
+            where: {
+              username: createUserDto.username,
+            },
+          });
+          if (userByEmail || userByUsername) {
+            throw new HttpException(
+              'Email or Username are taken',
+              HttpStatus.UNPROCESSABLE_ENTITY,
+            );
+          }
 
-      const newUser = this.userRepository.create(user);
-      await this.userRepository.save(newUser);
-      return newUser as GetUserResponseDto;
+          const newUser = new Users();
+          Object.assign(newUser, createUserDto);
+          return (await this.userRepository.save(
+            newUser,
+          )) as GetUserResponseDto;
+        },
+      );
     } catch (e) {
       throw e;
     }

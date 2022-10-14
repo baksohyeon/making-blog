@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-@Entity()
+@Entity({ name: 'users' })
 export class Users {
   @PrimaryGeneratedColumn({ name: 'user_id' })
   id: number;
@@ -28,20 +28,20 @@ export class Users {
   @IsNotEmpty({ message: 'The password is required' })
   password: string;
 
+  @IsEmail({ unique: true })
+  @Column()
+  email: string;
+
+  @Column({ default: '' })
+  bio: string;
+
+  @Column()
+  image: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
   }
-
-  @IsEmail({ unique: true })
-  @Column()
-  email: string;
-
-  @Column({ default: '' })
-  bio?: string;
-
-  @Column({ default: '' })
-  image: string;
 }

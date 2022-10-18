@@ -7,19 +7,21 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { GetUserResponseDto } from 'src/user/dto/read-user.dto';
-import { Users } from 'src/user/entity/users.entity';
+import { User } from 'src/user/entity/user.entity';
 import { encodePassword } from 'src/utils/bcrypt';
 import { getConnection, Repository } from 'typeorm';
+import { GetUserResponseInterface } from './interface/getUserRespone.interface';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(Users)
-    private userRepository: Repository<Users>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<GetUserResponseDto> {
+  async createUser(
+    createUserDto: CreateUserDto,
+  ): Promise<GetUserResponseInterface> {
     try {
       // transaction 사용
       return await this.userRepository.manager.transaction(
@@ -41,11 +43,11 @@ export class UserService {
             );
           }
 
-          const newUser = new Users();
+          const newUser = new User();
           Object.assign(newUser, createUserDto);
           return (await this.userRepository.save(
             newUser,
-          )) as GetUserResponseDto;
+          )) as GetUserResponseInterface;
         },
       );
     } catch (e) {
@@ -53,7 +55,7 @@ export class UserService {
     }
   }
 
-  async getUserbyUsername(username: string): Promise<GetUserResponseDto> {
+  async getUserbyUsername(username: string): Promise<GetUserResponseInterface> {
     try {
       const userSelectedByAuthor = await this.userRepository.findOne({
         where: {
@@ -63,7 +65,7 @@ export class UserService {
       if (!userSelectedByAuthor) {
         throw new NotFoundException(`Corresponding user is not Exists.`);
       }
-      return userSelectedByAuthor as GetUserResponseDto;
+      return userSelectedByAuthor as GetUserResponseInterface;
     } catch (e) {
       if (e.constructor.name !== 'NotFoundException') {
         throw new BadRequestException();

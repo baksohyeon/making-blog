@@ -1,14 +1,14 @@
-import { IsEmail, IsNotEmpty, Length } from 'class-validator';
-import { Board } from 'src/board/entity/board.entity';
+import { IsEmail, isEmail, IsNotEmpty, Length } from 'class-validator';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
-@Entity()
+@Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn({ name: 'user_id' })
   id: number;
@@ -32,9 +32,16 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ default: '' })
   bio: string;
 
-  @OneToMany(() => Board, (Board) => Board.user)
-  boards: Board[];
+  @Column()
+  image: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 }

@@ -112,7 +112,7 @@ describe('BlogController', () => {
         title: 'test',
         description: 'test',
         body: 'test',
-        author: 'test',
+        username: 'test',
       };
 
       await expect(blogController.createBoard(newCreateBoard)).resolves.toEqual(

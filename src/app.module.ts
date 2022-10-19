@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { BoardModule } from './board/board.module';
 import { TagsModule } from './tags/tags.module';
 import DatabaseConfig from './databaseConfig';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(DatabaseConfig), BoardModule, TagsModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [TypeOrmModule.forRoot(DatabaseConfig), BoardModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

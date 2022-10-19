@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateBoardDto {
   @IsNotEmpty()
@@ -16,9 +16,10 @@ export class CreateBoardDto {
 
   @IsNotEmpty()
   @IsString()
-  readonly author: string;
-}
+  readonly username: string;
 
-export class CreateBoardResponse {
-  id: string;
+  @IsArray()
+  tagList: string[];
+
+  slug?: string;
 }

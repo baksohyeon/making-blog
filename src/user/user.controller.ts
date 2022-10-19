@@ -11,7 +11,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
-import { GetUserResponseInterface } from './interface/getUserRespone.interface';
+import { GetUserResponseDto } from './dto/getUserResponse.dto';
 
 @Controller('user')
 export class UserController {
@@ -21,7 +21,7 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   async createUser(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<GetUserResponseInterface> {
+  ): Promise<GetUserResponseDto> {
     const user = await this.userService.createUser(createUserDto);
     return user;
   }

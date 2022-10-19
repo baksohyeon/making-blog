@@ -10,7 +10,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entity/user.entity';
 import { encodePassword } from 'src/utils/bcrypt';
 import { getConnection, Repository } from 'typeorm';
-import { GetUserResponseInterface } from './interface/getUserRespone.interface';
+import { GetUserResponseDto } from './dto/getUserResponse.dto';
 
 @Injectable()
 export class UserService {
@@ -19,9 +19,7 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async createUser(
-    createUserDto: CreateUserDto,
-  ): Promise<GetUserResponseInterface> {
+  async createUser(createUserDto: CreateUserDto): Promise<GetUserResponseDto> {
     try {
       // transaction 사용
       return await this.userRepository.manager.transaction(
@@ -47,7 +45,7 @@ export class UserService {
           Object.assign(newUser, createUserDto);
           return (await this.userRepository.save(
             newUser,
-          )) as GetUserResponseInterface;
+          )) as GetUserResponseDto;
         },
       );
     } catch (e) {
@@ -55,7 +53,7 @@ export class UserService {
     }
   }
 
-  async getUserbyUsername(username: string): Promise<GetUserResponseInterface> {
+  async getUserbyUsername(username: string): Promise<GetUserResponseDto> {
     try {
       const userSelectedByAuthor = await this.userRepository.findOne({
         where: {
@@ -65,7 +63,7 @@ export class UserService {
       if (!userSelectedByAuthor) {
         throw new NotFoundException(`Corresponding user is not Exists.`);
       }
-      return userSelectedByAuthor as GetUserResponseInterface;
+      return userSelectedByAuthor as GetUserResponseDto;
     } catch (e) {
       if (e.constructor.name !== 'NotFoundException') {
         throw new BadRequestException();

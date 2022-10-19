@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'user' })
 export class User {
@@ -20,6 +21,7 @@ export class User {
   @IsNotEmpty({ message: 'The name is required' })
   username: string;
 
+  @Exclude()
   @Column()
   @Length(6, 30, {
     message:
@@ -42,6 +44,16 @@ export class User {
   @BeforeUpdate()
   async hashPassword() {
     const salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, salt);
+    if (
+      /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/.test(
+        this.password,
+      )
+    ) {
+      this.password = await bcrypt.hash(this.password, salt);
+    }
+  }
+
+  async checkPassword(plainPassword: string): Promise<Boolean> {
+    return await bcrypt.compare(plainPassword, this.password);
   }
 }

@@ -1,4 +1,4 @@
-export interface GetUserResponseInterface {
+export class GetUserResponseDto {
   id: number;
   username: string;
   password: string;
@@ -7,6 +7,6 @@ export interface GetUserResponseInterface {
   image: string;
 }
 
-export interface UserResponseWithJwtInterface extends GetUserResponseInterface {
+export class UserResponseWithJwtDto extends GetUserResponseDto {
   token: string;
 }

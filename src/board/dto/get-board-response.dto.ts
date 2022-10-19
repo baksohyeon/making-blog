@@ -1,4 +1,4 @@
-export interface GetBoardResponseInterface {
+export class GetBoardResponseDto {
   id: string;
 
   slug: string;

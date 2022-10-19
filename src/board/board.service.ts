@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './entity/board.entity';
-import { GetBoardResponseInterface } from './interface/get-board-response.interface';
+import { GetBoardResponseDto } from './dto/get-board-response.dto';
 
 @Injectable()
 export class BoardService {
@@ -32,7 +32,7 @@ export class BoardService {
   }
   // Read
 
-  async getAllBoards(): Promise<GetBoardResponseInterface[]> {
+  async getAllBoards(): Promise<GetBoardResponseDto[]> {
     try {
       const boards = await this.boardRepository.find();
       return boards;
@@ -44,14 +44,12 @@ export class BoardService {
     }
   }
 
-  async getBoardsByUsername(
-    username: string,
-  ): Promise<GetBoardResponseInterface[]> {
+  async getBoardsByUsername(username: string): Promise<GetBoardResponseDto[]> {
     try {
       const boards = await this.boardRepository.find({
         where: { username },
       });
-      return boards.map((board) => board as GetBoardResponseInterface);
+      return boards.map((board) => board as GetBoardResponseDto);
     } catch (e) {
       if (e.constructor.name === 'NotFoundException') {
         throw e;
@@ -63,7 +61,7 @@ export class BoardService {
   async updateBoard(
     id: string,
     updateBoardDto: UpdateBoardDto,
-  ): Promise<GetBoardResponseInterface> {
+  ): Promise<GetBoardResponseDto> {
     try {
       const board = await this.boardRepository.findOne({
         where: {
@@ -81,7 +79,7 @@ export class BoardService {
             Object.assign(newBoard, updateBoardDto);
             const savedBoard = await manager.save(board);
 
-            return savedBoard as GetBoardResponseInterface;
+            return savedBoard as GetBoardResponseDto;
           },
         );
       }
@@ -90,7 +88,7 @@ export class BoardService {
     }
   }
 
-  async deleteBoard(id: string): Promise<GetBoardResponseInterface> {
+  async deleteBoard(id: string): Promise<GetBoardResponseDto> {
     try {
       const droppedBoard = await this.boardRepository.findOne({
         where: {
@@ -101,7 +99,7 @@ export class BoardService {
         throw new NotFoundException('Corresponding ID is not found');
       } else {
         this.boardRepository.delete(id);
-        return droppedBoard as GetBoardResponseInterface;
+        return droppedBoard as GetBoardResponseDto;
       }
     } catch (e) {
       if (e.constructor.name === 'NotFoundException') {

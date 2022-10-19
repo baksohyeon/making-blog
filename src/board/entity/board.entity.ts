@@ -6,15 +6,17 @@ import {
   Generated,
   PrimaryColumn,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class Board {
-  // @PrimaryColumn({ type: 'binary', length: 16 })
-  // id!: Buffer;
   @PrimaryColumn({ type: 'binary' })
   @Generated('uuid')
   id: string;
+
+  @Column({ default: '' })
+  slug: string;
 
   @Column()
   title: string;
@@ -22,19 +24,21 @@ export class Board {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ default: '' })
   body: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   username: string;
 
-  // @CreateDateColumn({ type: 'timestamp' })
-  // date_posted: Date;
+  @Column({ type: 'simple-array' })
+  tagList: string[];
 
-  @Column({
-    name: 'dated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  datedAt?: Date;
+  @Column({ default: 0 })
+  favoritesCount: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

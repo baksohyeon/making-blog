@@ -15,30 +15,30 @@ export class Board {
   @Generated('uuid')
   id: string;
 
-  @Column()
+  @Column({ default: '' })
   slug: string;
 
   @Column()
   title: string;
 
-  @Column({ default: '' })
+  @Column()
   description: string;
 
   @Column({ default: '' })
   body: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar' })
   username: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @Column({ type: 'simple-array' })
   tagList: string[];
 
   @Column({ default: 0 })
   favoritesCount: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

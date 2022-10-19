@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { GetBoardResponseDto } from './dto/read-board.dto';
+import { GetBoardResponseInterface } from './interface/get-board-response.interface';
 import { Board } from './entity/board.entity';
 
 @Injectable()
@@ -17,21 +17,22 @@ export class BoardService {
     private boardRepository: Repository<Board>,
   ) {}
 
-  async createBoard(creatBoardDto: CreateBoardDto): Promise<Board> {
+  async createBoard(creatBoardDto: CreateBoardDto) {
     try {
       const board = new Board();
-      board.title = creatBoardDto.title;
-      board.description = creatBoardDto.description;
-      board.body = creatBoardDto.body;
-      board.username = creatBoardDto.username;
-      const newBoard = await this.boardRepository.save(board);
-      return newBoard;
+      Object.assign(board, creatBoardDto);
+      if (!board.tagList) {
+        board.tagList = [];
+      }
+      board.slug = 'foo';
+      return await this.boardRepository.save(board);
     } catch (e) {
       throw e;
     }
   }
   // Read
-  async getAllBoards(): Promise<Board[]> {
+
+  async getAllBoards(): Promise<GetBoardResponseInterface[]> {
     try {
       const boards = await this.boardRepository.find();
       return boards;
@@ -43,14 +44,14 @@ export class BoardService {
     }
   }
 
-  async getBoardsByAuthor(author: string): Promise<GetBoardResponseDto[]> {
+  async getBoardsByUsername(
+    username: string,
+  ): Promise<GetBoardResponseInterface[]> {
     try {
       const boards = await this.boardRepository.find({
-        where: {
-          username: author,
-        },
+        where: { username },
       });
-      return boards.map((board) => board as GetBoardResponseDto);
+      return boards.map((board) => board as GetBoardResponseInterface);
     } catch (e) {
       if (e.constructor.name === 'NotFoundException') {
         throw e;
@@ -62,7 +63,7 @@ export class BoardService {
   async updateBoard(
     id: string,
     updateBoardDto: UpdateBoardDto,
-  ): Promise<GetBoardResponseDto> {
+  ): Promise<GetBoardResponseInterface> {
     try {
       const board = await this.boardRepository.findOne({
         where: {
@@ -78,15 +79,10 @@ export class BoardService {
         return await this.boardRepository.manager.transaction(
           async (manager) => {
             let newBoard = new Board();
-            newBoard.title = updateBoardDto.title || board.title;
-            newBoard.username = updateBoardDto.username || board.username;
-            newBoard.body = updateBoardDto.body || board.body;
-            newBoard.description =
-              updateBoardDto.description || board.description;
-
+            Object.assign(newBoard, updateBoardDto);
             const savedBoard = await manager.save(board);
 
-            return savedBoard as GetBoardResponseDto;
+            return savedBoard as GetBoardResponseInterface;
           },
         );
       }
@@ -95,7 +91,7 @@ export class BoardService {
     }
   }
 
-  async deleteBoard(id: string): Promise<GetBoardResponseDto> {
+  async deleteBoard(id: string): Promise<GetBoardResponseInterface> {
     try {
       const droppedBoard = await this.boardRepository.findOne({
         where: {
@@ -106,7 +102,7 @@ export class BoardService {
         throw new NotFoundException('Corresponding ID is not found');
       } else {
         this.boardRepository.delete(id);
-        return droppedBoard as GetBoardResponseDto;
+        return droppedBoard as GetBoardResponseInterface;
       }
     } catch (e) {
       if (e.constructor.name === 'NotFoundException') {

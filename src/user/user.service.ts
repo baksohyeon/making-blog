@@ -8,8 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entity/user.entity';
-import { encodePassword } from 'src/utils/bcrypt';
-import { getConnection, Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { GetUserResponseDto } from './dto/getUserResponse.dto';
 
 @Injectable()
@@ -50,6 +49,16 @@ export class UserService {
       );
     } catch (e) {
       throw e;
+    }
+  }
+
+  async findOne(where: FindOneOptions<User>) {
+    const user = await this.userRepository.findOne(where);
+
+    if (!user) {
+      throw new NotFoundException(
+        `There isn't any user with identifier ${where}`,
+      );
     }
   }
 

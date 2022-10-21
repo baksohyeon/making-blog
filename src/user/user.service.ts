@@ -52,7 +52,7 @@ export class UserService {
     }
   }
 
-  async findOne(where: FindOneOptions<User>) {
+  async findOne(where: FindOneOptions<User>): Promise<User> {
     const user = await this.userRepository.findOne(where);
 
     if (!user) {
@@ -60,6 +60,7 @@ export class UserService {
         `There isn't any user with identifier ${where}`,
       );
     }
+    return user;
   }
 
   async getUserbyUsername(username: string): Promise<GetUserResponseDto> {

@@ -5,7 +5,6 @@ import { UserModule } from './user/user.module';
 import DatabaseConfig from './databaseConfig';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
-import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -14,7 +13,7 @@ import { AppController } from './app.controller';
     AuthModule,
     BoardModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {

@@ -21,8 +21,8 @@ export class User {
   @IsNotEmpty({ message: 'The name is required' })
   username: string;
 
-  @Exclude()
   @Column()
+  @Exclude()
   @Length(6, 30, {
     message:
       'The password must be at least 6 but not longer than 30 characters',
@@ -42,18 +42,16 @@ export class User {
 
   @BeforeInsert()
   @BeforeUpdate()
-  async hashPassword() {
+  async hashPassword(): Promise<void> {
     const salt = await bcrypt.genSalt();
-    if (
-      /^[$]2[abxy]?[$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$/.test(
-        this.password,
-      )
-    ) {
-      this.password = await bcrypt.hash(this.password, salt);
-    }
+    this.password = await bcrypt.hash(this.password, salt);
   }
 
-  async checkPassword(plainPassword: string): Promise<Boolean> {
-    return await bcrypt.compare(plainPassword, this.password);
+  // async checkPassword(plainPassword: string): Promise<Boolean> {
+  //   return await bcrypt.compare(plainPassword, this.password);
+  // }
+
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
   }
 }

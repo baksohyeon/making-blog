@@ -1,12 +1,11 @@
 export class GetUserResponseDto {
-  id: number;
-  username: string;
-  password: string;
-  email: string;
-  bio: string;
-  image: string;
+  readonly id: number;
+  readonly username: string;
+  readonly email: string;
+  readonly bio: string;
+  readonly image: string;
 }
 
-export class UserResponseWithJwtDto extends GetUserResponseDto {
-  token: string;
+export class GetUserResponseWithJwtDto extends GetUserResponseDto {
+  readonly token: string;
 }

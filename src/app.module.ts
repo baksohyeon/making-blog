@@ -1,13 +1,27 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
 import { BoardModule } from './board/board.module';
 import { TagsModule } from './tags/tags.module';
 import DatabaseConfig from './databaseConfig';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { AuthMiddleware } from './user/middleware/auth.middleware';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(DatabaseConfig), BoardModule],
+  imports: [TypeOrmModule.forRoot(DatabaseConfig), UserModule, BoardModule],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  constructor(private dataSource: DataSource) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
+  }
+}

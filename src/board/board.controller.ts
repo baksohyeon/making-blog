@@ -11,7 +11,7 @@ import {
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { GetBoardResponseInterface } from './interface/get-board-response.interface';
+import { GetBoardResponseDto } from './dto/get-board-response.dto';
 
 @Controller('blog')
 export class BoardController {
@@ -22,7 +22,7 @@ export class BoardController {
   async createBoard(
     @Body()
     createBoardDto: CreateBoardDto,
-  ): Promise<GetBoardResponseInterface> {
+  ): Promise<GetBoardResponseDto> {
     try {
       return await this.boardService.createBoard(createBoardDto);
     } catch (e: any) {
@@ -42,7 +42,7 @@ export class BoardController {
   }
 
   @Get('/all')
-  async getAllBoards(): Promise<GetBoardResponseInterface[]> {
+  async getAllBoards(): Promise<GetBoardResponseDto[]> {
     try {
       return await this.boardService.getAllBoards();
     } catch (e) {
@@ -53,7 +53,7 @@ export class BoardController {
   @Get('/author/:author')
   async getBoardByAuthor(
     @Param('author') author: string,
-  ): Promise<GetBoardResponseInterface[]> {
+  ): Promise<GetBoardResponseDto[]> {
     return this.boardService.getBoardsByUsername(author);
   }
 
@@ -61,14 +61,12 @@ export class BoardController {
   async updateBoard(
     @Param('id') id: string,
     @Body() updateBoardDto: UpdateBoardDto,
-  ): Promise<GetBoardResponseInterface> {
+  ): Promise<GetBoardResponseDto> {
     return this.boardService.updateBoard(id, updateBoardDto);
   }
 
   @Delete('/:id')
-  async deleteBoard(
-    @Param('id') id: string,
-  ): Promise<GetBoardResponseInterface> {
+  async deleteBoard(@Param('id') id: string): Promise<GetBoardResponseDto> {
     try {
       const board = await this.boardService.deleteBoard(id);
       return board;

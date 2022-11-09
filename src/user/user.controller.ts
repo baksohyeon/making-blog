@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   UseGuards,
   UseInterceptors,
@@ -19,6 +20,7 @@ import { UserResponseInterface } from './types/userResponse.interface';
 import { ExpressRequest } from 'src/types/express.interface';
 import { UserDecorator } from './decorator/user.decorator';
 import { AuthGuard } from './guards/auth.guard';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -52,7 +54,16 @@ export class UserController {
   ): Promise<UserResponseInterface> {
     // 미들웨어에서 토큰에서 유저 추출
     // 가드에서 유저가 있으면 true 반환
-    //
     return this.userService.buildUserResponse(user);
+  }
+
+  @Put()
+  @UseGuards(AuthGuard)
+  async updateCurrentUser(
+    @UserDecorator('id') userId: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserResponseInterface> {
+    const user = await this.userService.updateUser(userId, updateUserDto);
+    return user;
   }
 }

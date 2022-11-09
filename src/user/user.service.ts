@@ -14,6 +14,7 @@ import * as jwt from 'jsonwebtoken';
 import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 import { classToPlain, instanceToPlain } from 'class-transformer';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -153,5 +154,15 @@ export class UserService {
         throw new BadRequestException();
       } else throw e;
     }
+  }
+
+  async updateUser(
+    userId: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserResponseInterface> {
+    const user = await this.getUserById(userId);
+    Object.assign(user, updateUserDto);
+    const updatedUser = await this.userRepository.save(user);
+    return this.buildUserResponse(updatedUser);
   }
 }
